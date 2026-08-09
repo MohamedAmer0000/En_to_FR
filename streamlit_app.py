@@ -1,23 +1,13 @@
-```python
 import streamlit as st
 import torch
 from transformers import AutoTokenizer, AutoModelForSeq2SeqLM
 
 
-# ==============================
-# Configuration
-# ==============================
-
 MODEL_NAME = "Helsinki-NLP/opus-mt-en-fr"
 
 
-# ==============================
-# Load Model
-# ==============================
-
 @st.cache_resource
 def load_model():
-
     tokenizer = AutoTokenizer.from_pretrained(MODEL_NAME)
 
     model = AutoModelForSeq2SeqLM.from_pretrained(
@@ -31,10 +21,6 @@ def load_model():
 
 tokenizer, model = load_model()
 
-
-# ==============================
-# Translation Function
-# ==============================
 
 def translate(text):
 
@@ -50,8 +36,7 @@ def translate(text):
         output = model.generate(
             **inputs,
             max_new_tokens=100,
-            num_beams=4,
-            early_stopping=True
+            num_beams=4
         )
 
     translation = tokenizer.decode(
@@ -62,27 +47,21 @@ def translate(text):
     return translation
 
 
-# ==============================
-# Streamlit Interface
-# ==============================
-
 st.set_page_config(
     page_title="English → French Translator",
-    page_icon="🇫🇷",
-    layout="centered"
+    page_icon="🇫🇷"
 )
 
 st.title("🇬🇧 → 🇫🇷 English to French Translator")
 
 st.write(
-    "Translate English text into French using "
-    "a pretrained Transformer model."
+    "Translate English text into French using a pretrained Transformer model."
 )
 
 
 text = st.text_area(
     "Enter English text",
-    placeholder="Type your English sentence here...",
+    placeholder="Type your English text here...",
     height=150
 )
 
@@ -102,4 +81,3 @@ if st.button("Translate", type="primary"):
     else:
 
         st.warning("Please enter some English text.")
-```
